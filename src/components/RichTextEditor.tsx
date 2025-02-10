@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Heading from "@tiptap/extension-heading";
 import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
+import Text from "@tiptap/extension-text";
 import { Color } from "@tiptap/extension-color";
 import Image from "@tiptap/extension-image";
 import Underline from "@tiptap/extension-underline";
@@ -38,6 +39,7 @@ import DownloadDropdown from "./DownloadDropdown";
 import ImageResizer from "./ImageResizer";
 import { AICommands } from "@/extensions/AiCommands";
 import AICommandMenu from "@/components/AiCommandMenu";
+import { FontSize } from "@/extensions/FontSize";
 
 const lowlight = createLowlight(common);
 
@@ -63,12 +65,14 @@ const CustomTableCell = TableCell.extend({
 });
 
 type RichTextEditorProps = {
+  placeholder?: string;
   contentValue?: string;
   onChange?: (richText: string) => void;
 };
 
 const RichTextEditor = ({
-  contentValue = "<p>Start typing here...</p>",
+  placeholder = "Start typing here...",
+  contentValue,
   onChange,
 }: RichTextEditorProps) => {
   const [content, setContent] = useState(contentValue);
@@ -76,6 +80,8 @@ const RichTextEditor = ({
   const [showAIMenu, setShowAIMenu] = useState(false);
   const [aiMenuPosition, setAIMenuPosition] = useState({ top: 0, left: 0 });
   const [isLoading, setIsLoading] = useState(false);
+  // const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+  // const floatingMenuRef = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
     editorProps: {
@@ -88,6 +94,18 @@ const RichTextEditor = ({
         heading: { levels: [1, 2, 3, 4, 5, 6] },
         codeBlock: false,
       }),
+      Placeholder.configure({
+        // Use a placeholder:
+        placeholder: placeholder,
+        // Use different placeholders depending on the node type:
+        // placeholder: ({ node }) => {
+        //   if (node.type.name === "heading") {
+        //     return "What&apos;s the title?";
+        //   }
+
+        //   return "Can you add some further context?";
+        // },
+      }),
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
       }),
@@ -95,6 +113,7 @@ const RichTextEditor = ({
         types: ["heading", "paragraph"],
       }),
       TextStyle,
+      Text,
       Color.configure(),
       Image.configure({
         inline: true,
@@ -107,14 +126,13 @@ const RichTextEditor = ({
       CharacterCount,
       CodeBlockLowlight.configure({
         lowlight,
-        HTMLAttributes: {
-          class: "bg-natural-900",
-        },
       }),
       Document,
       Dropcursor,
       Focus,
-      FontFamily,
+      FontFamily.configure({
+        types: ["textStyle"],
+      }),
       Highlight,
       HorizontalRule,
       Link,
@@ -129,9 +147,6 @@ const RichTextEditor = ({
         },
       }),
       Paragraph,
-      Placeholder.configure({
-        placeholder: "Write something …",
-      }),
       Subscript,
       Superscript,
       Table.configure({
@@ -139,13 +154,14 @@ const RichTextEditor = ({
       }),
       TableHeader,
       TableRow,
-      // TableCell,
       CustomTableCell,
       TaskItem,
       TaskList,
       Typography,
       AICommands,
+      FontSize,
     ],
+    autofocus: true,
     content: content,
     onUpdate: ({ editor }) => {
       if (onChange) {
@@ -162,10 +178,26 @@ const RichTextEditor = ({
         const coords = editor.view.coordsAtPos($from.pos);
         setAIMenuPosition({ top: coords.bottom, left: coords.left });
         setShowAIMenu(true);
+        // setShowFloatingMenu(false);
+      } else if (currentLineText.trim() === "") {
+        // setShowFloatingMenu(true);
+        setShowAIMenu(false);
       } else {
+        // setShowFloatingMenu(false);
         setShowAIMenu(false);
       }
     },
+    // onFocus: () => {
+    //   // setShowFloatingMenu(true);
+    // },
+    // onBlur: ({ event }) => {
+    //   // if (
+    //   //   floatingMenuRef.current &&
+    //   //   !floatingMenuRef.current.contains(event.relatedTarget as Node)
+    //   // ) {
+    //   //   setShowFloatingMenu(false);
+    //   // }
+    // },
   });
 
   const handleImageUpload = (file: File) => {
@@ -250,6 +282,13 @@ const RichTextEditor = ({
         onImageUpload={handleImageUpload}
         onImageEdit={() => setShowImageResizer(true)}
       />
+      {/* {editor && showFloatingMenu && (
+        <div ref={floatingMenuRef} className="absolute z-10">
+          <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
+            <FloatingToolbar editor={editor} />
+          </FloatingMenu>
+        </div>
+      )} */}
       <EditorContent
         editor={editor}
         className="p-4 min-h-[300px] prose max-w-none"
@@ -260,6 +299,7 @@ const RichTextEditor = ({
           Characters: {editor.storage.characterCount.characters()}
         </div>
       )}
+      {/* todo: Fix */}
       {showImageResizer && editor && (
         <ImageResizer
           editor={editor}

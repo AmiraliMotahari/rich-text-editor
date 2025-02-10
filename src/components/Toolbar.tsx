@@ -27,23 +27,18 @@ import {
   Image,
   Ruler,
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import TextStyle from "./toolbarOptions/textStyle";
+import FontStyle from "./toolbarOptions/FontStyle";
+import FontSize from "./toolbarOptions/FontSize";
 
 interface ToolbarProps {
   editor: Editor | null;
   onImageUpload: (file: File) => void;
   onImageEdit: () => void;
 }
-
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 const Toolbar: React.FC<ToolbarProps> = ({
   editor,
@@ -63,10 +58,6 @@ const Toolbar: React.FC<ToolbarProps> = ({
     }
   };
 
-  const setHeading = (level: HeadingLevel) => {
-    editor.chain().focus().toggleHeading({ level }).run();
-  };
-
   const setLink = () => {
     const url = prompt("Enter the URL:");
     if (url) {
@@ -84,29 +75,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   return (
     <div className="flex flex-wrap items-center gap-2 p-2 border-b">
-      <Select
-        onValueChange={(value) => {
-          if (value === "paragraph") {
-            editor.chain().focus().setParagraph().run();
-          } else {
-            setHeading(Number.parseInt(value, 10) as HeadingLevel);
-          }
-        }}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Paragraph" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="paragraph">Paragraph</SelectItem>
-          <SelectItem value="1">Heading 1</SelectItem>
-          <SelectItem value="2">Heading 2</SelectItem>
-          <SelectItem value="3">Heading 3</SelectItem>
-          <SelectItem value="4">Heading 4</SelectItem>
-          <SelectItem value="5">Heading 5</SelectItem>
-          <SelectItem value="6">Heading 6</SelectItem>
-        </SelectContent>
-      </Select>
+      <TextStyle editor={editor} />
+      <FontStyle editor={editor} />
+      <FontSize editor={editor} />
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -115,6 +88,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Bold className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -123,6 +97,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Italic className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
@@ -131,6 +106,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Underline className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleStrike().run()}
@@ -139,6 +115,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Strikethrough className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -147,6 +124,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <List className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
@@ -155,6 +133,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <ListOrdered className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
@@ -163,6 +142,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Quote className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
@@ -171,6 +151,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <AlignLeft className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
@@ -179,6 +160,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <AlignCenter className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
@@ -187,6 +169,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <AlignRight className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().setTextAlign("justify").run()}
@@ -200,6 +183,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         className="w-8 h-8 p-0 border-none rounded-full cursor-pointer"
       />
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().undo().run()}
@@ -207,6 +191,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Undo className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().redo().run()}
@@ -214,6 +199,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Redo className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => imageInputRef.current?.click()}
@@ -228,6 +214,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         className="hidden"
       />
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={onImageEdit}
@@ -235,10 +222,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
       >
         <Edit className="h-4 w-4" />
       </Button>
-      <Button variant="ghost" size="icon" onClick={setLink}>
+      <Button type="button" variant="ghost" size="icon" onClick={setLink}>
         <Link className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().unsetLink().run()}
@@ -247,6 +235,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Unlink className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleHighlight().run()}
@@ -255,6 +244,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Highlighter className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleSubscript().run()}
@@ -263,6 +253,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Subscript className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
@@ -270,10 +261,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
       >
         <Superscript className="h-4 w-4" />
       </Button>
-      <Button variant="ghost" size="icon" onClick={insertTable}>
+      <Button type="button" variant="ghost" size="icon" onClick={insertTable}>
         <Table className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleTaskList().run()}
@@ -282,6 +274,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <CheckSquare className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
@@ -290,6 +283,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <Code className="h-4 w-4" />
       </Button>
       <Button
+        type="button"
         variant="ghost"
         size="icon"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}

@@ -13,6 +13,7 @@ import RichTextEditor from "./RichTextEditor";
 type RichTextInputProps<S> = {
   nameInSchema: keyof S & string;
   fieldTitle?: string;
+  placeholder?: string;
   description?: string;
   className?: string;
 };
@@ -20,6 +21,7 @@ type RichTextInputProps<S> = {
 const RichTextInput = <S,>({
   nameInSchema,
   fieldTitle,
+  placeholder,
   description,
   className,
 }: RichTextInputProps<S>) => {
@@ -33,6 +35,7 @@ const RichTextInput = <S,>({
           {fieldTitle ? <FormLabel>{fieldTitle}</FormLabel> : null}
           <FormControl>
             <RichTextEditor
+              placeholder={placeholder}
               contentValue={field.value}
               onChange={field.onChange}
             />
