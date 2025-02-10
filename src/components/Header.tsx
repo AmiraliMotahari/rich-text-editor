@@ -13,6 +13,9 @@ const Header = () => {
           <Link href="/form" className="text-sm font-medium">
             Form Editor
           </Link>
+          <Link href="/novel" className="text-sm font-medium">
+            Novel Editor
+          </Link>
         </div>
         <ModeToggle />
       </nav>

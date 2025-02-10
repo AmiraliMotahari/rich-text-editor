@@ -74,7 +74,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 p-2 border-b">
+    <div className="flex flex-wrap items-center gap-2 p-2 border-b sticky top-0 bg-background z-10">
       <TextStyle editor={editor} />
       <FontStyle editor={editor} />
       <FontSize editor={editor} />

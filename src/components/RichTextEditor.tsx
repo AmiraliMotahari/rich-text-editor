@@ -282,6 +282,7 @@ const RichTextEditor = ({
         onImageUpload={handleImageUpload}
         onImageEdit={() => setShowImageResizer(true)}
       />
+      {/* Todo: Fix */}
       {/* {editor && showFloatingMenu && (
         <div ref={floatingMenuRef} className="absolute z-10">
           <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
