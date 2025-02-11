@@ -34,9 +34,6 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
   const { editor } = useEditor();
   if(!editor) return null
 
-  console.log(options);
-  
-
   return (
     <>
       <CommandGroup heading="Edit or review selection">
@@ -44,7 +41,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
           <CommandItem
             onSelect={(value) => {
               const slice = editor.state.selection.content();
-              const text = editor.storage.markdown.serializer.serialize(slice.content);
+              const text = editor.storage?.markdown?.serializer?.serialize(slice.content) ?? "testing";
               onSelect(text, value);
             }}
             className="flex gap-2 px-4"
@@ -61,7 +58,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
         <CommandItem
           onSelect={() => {
             const pos = editor.state.selection.from;
-            const text = getPrevText(editor, pos);
+            const text = getPrevText(editor, pos) ?? "";
             onSelect(text, "continue");
           }}
           value="continue"

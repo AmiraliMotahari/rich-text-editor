@@ -24,6 +24,7 @@ import { MathSelector } from "@/components/novel/selectors/math-selector";
 import { NodeSelector } from "@/components/novel/selectors/node-selector";
 import { TextButtons } from "@/components/novel/selectors/text-buttons";
 import GenerativeMenuSwitch from "./generative/generative-menu-switch";
+
 import {
   slashCommand,
   suggestionItems,
@@ -105,7 +106,7 @@ const NovelEditor = () => {
         <EditorContent
           initialContent={initialContent}
           extensions={extensions}
-          className="relative min-h-[500px] w-full max-w-screen-lg border-muted bg-background sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:shadow-lg"
+          className="relative min-h-[500px] w-full max-w-screen-lg border-muted sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:shadow-lg"
           editorProps={{
             handleDOMEvents: {
               keydown: (_view, event) => handleCommandNavigation(event),
@@ -116,7 +117,7 @@ const NovelEditor = () => {
               handleImageDrop(view, event, moved, uploadFn),
             attributes: {
               class:
-                "prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full",
+                "prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full min-h-[500px]",
             },
           }}
           onUpdate={({ editor }) => {
